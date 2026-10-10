@@ -550,4 +550,3 @@ By bringing creator portfolios, brief management, explainable matching, verifica
 🎨 **Project:** CREOVA AI  
 🏆 **Category:** AI-enabled creative marketplace  
 🌐 **Live Application:** https://creova-ai-6jmu.hatchable.site 
-📘 **Documentation:** https://creova-ai.hatchable.site/project-notes.html.
