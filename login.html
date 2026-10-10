@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in — CREOVA</title><link rel="stylesheet" href="/theme.css">
+<style>
+.login-wrap{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}.login-side{padding:8%;display:flex;flex-direction:column;justify-content:space-between;background:#efe7dc}.login-side h1{font:500 clamp(42px,5.3vw,70px)/1.03 Georgia,serif;letter-spacing:-.05em;max-width:560px}.login-side h1 em{color:var(--accent)}.login-form-side{display:grid;place-items:center;padding:28px}.login-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow)}.login-card h2{font:500 30px Georgia,serif;margin:13px 0 8px}.login-card p{font-size:13px;color:var(--muted)}.login-input{width:100%;margin:14px 0 4px;border:1px solid var(--line);border-radius:11px;padding:13px;background:#fffefa}.login-error{font-size:12px;color:#963c2d;background:#f7e4df;padding:10px;border-radius:10px;margin:12px 0}.login-submit{width:100%;margin-top:14px}.login-links{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-top:20px;color:var(--muted)}@media(max-width:760px){.login-wrap{grid-template-columns:1fr}.login-side{min-height:220px;padding:28px}.login-side h1{font-size:38px}.login-form-side{padding:20px}.login-card{padding:24px}}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <section class="login-side">
+    <a class="wordmark" href="/"><span class="mark">C</span> CREOVA</a>
+    <div><div class="eyebrow">A more human creative marketplace</div><h1>Make space for <em>what's next.</em></h1><p class="muted" style="max-width:400px">Find the right creative minds. Bring the right brief. Make work worth remembering.</p></div>
+    <div class="muted" style="font-size:11px">Discover talent. Verify creativity. Create without limits.</div>
+  </section>
+  <section class="login-form-side">
+    <div class="login-card">
+      <a class="wordmark" href="/"><span class="mark">C</span> CREOVA</a>
+      <h2 id="title">Welcome back.</h2><p id="desc">Sign in or create an account with a secure email code. No password needed.</p>
+      <form id="login-form">
+        <label class="field"><span id="email-label">Email address</span><input class="login-input" id="email" type="email" autocomplete="username webauthn" placeholder="you@studio.com" required></label>
+        <div id="code-wrap" hidden><label class="field"><span>6-digit verification code</span><input class="login-input" id="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000"></label></div>
+        <div id="error" class="login-error" hidden></div>
+        <button class="btn btn-primary login-submit" id="submit" type="submit">Continue with email</button>
+      </form>
+      <button class="btn btn-soft btn-small" id="help-btn" type="button" style="width:100%;margin-top:12px">How to sign in? ⓘ</button>
+      <div id="passkey-offer" hidden><div class="notice success">Make your next sign-in faster with a passkey on this device.</div><button class="btn btn-soft" id="add-passkey" type="button">Add a passkey</button><button class="btn btn-soft" id="skip-passkey" type="button">Not now</button></div>
+      <div class="login-links"><a href="/#/home">← Back to CREOVA</a><span>Secure email verification</span></div>
+    </div>
+  </section>
+</div>
+
+<!-- Accessible Login Help Modal -->
+<div id="help-modal" class="help-backdrop" hidden>
+  <div class="help-panel" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="help-header">
+      <div>
+        <div class="eyebrow">CREOVA Sign-In & Access Guide</div>
+        <h2 id="help-title" class="serif" style="margin:4px 0 0;font-size:24px">How Sign-In & Accounts Work</h2>
+      </div>
+      <button type="button" class="help-close" id="help-close" aria-label="Close help guide">✕</button>
+    </div>
+
+    <div class="help-content">
+      <section class="help-section">
+        <h3>1. Passwordless Email Sign-In</h3>
+        <p>CREOVA uses passwordless email access codes. You never have to remember or manage passwords:</p>
+        <ol>
+          <li>Enter your work or studio email address in the field above.</li>
+          <li>Click <strong>Continue with email</strong>. CREOVA will immediately issue a secure 6-digit access code to your inbox.</li>
+          <li>Enter the 6-digit code and click <strong>Verify and sign in</strong> to enter your workspace.</li>
+          <li><em>Optional passkeys:</em> If your device supports Touch ID, Face ID, or Windows Hello, you can save a passkey for 1-click sign-in on future visits.</li>
+        </ol>
+      </section>
+
+      <section class="help-section">
+        <h3>2. New Account Registration & Role Selection</h3>
+        <p>If you don't have an account yet, no separate registration link is needed:</p>
+        <ul>
+          <li>Simply enter your email address and verify the one-time code sent to your inbox.</li>
+          <li>Upon your first verified sign-in, CREOVA will prompt you to complete your onboarding profile and choose your account role:
+            <div class="help-roles">
+              <div class="help-role-card">
+                <strong>Creator Studio</strong>
+                <span>For AI filmmakers, visual artists, and generative creators showcasing portfolios and applying to briefs.</span>
+              </div>
+              <div class="help-role-card">
+                <strong>Brand / Agency</strong>
+                <span>For creative directors, brands, and marketing teams publishing briefs, discovering creators, and commissioning work.</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="help-section">
+        <h3>3. Verification Code Troubleshooting</h3>
+        <p>If your 6-digit verification code has not arrived:</p>
+        <ul>
+          <li><strong>Check Spam/Junk:</strong> Occasionally verification emails are routed to promotional or spam folders.</li>
+          <li><strong>Check email spelling:</strong> Make sure there are no typos in the email address you entered.</li>
+          <li><strong>Code expiration:</strong> Verification codes expire after a short security window. If your code expired or fails, click <em>← Change email</em> or refresh the page to request a fresh code.</li>
+        </ul>
+      </section>
+
+      <section class="help-section">
+        <h3>4. Automatic Role-Based Dashboard Navigation</h3>
+        <p>Once authenticated, CREOVA automatically redirects you to your dedicated workspace based on your profile role:</p>
+        <ul>
+          <li><strong>Creators</strong> reach their <em>Creator Studio</em> (Portfolio Studio, Document Deliverables, Opportunities, Proposals, Engagements, and Verification).</li>
+          <li><strong>Brands and Agencies</strong> reach their <em>Campaign Workspace</em> (Brief Management, Creator Discovery, Saved Shortlist, Incoming Proposals, and Deliverables Review).</li>
+        </ul>
+      </section>
+
+      <section class="help-section">
+        <h3>5. Demonstration Profiles & Public Browsing</h3>
+        <div class="help-demo-box">
+          <p><strong>Demonstration Fixture Data:</strong> The platform database includes seeded fixture profiles for public browsing and preview:</p>
+          <ul style="margin:8px 0;padding-left:20px;font-size:12px">
+            <li><strong>Creators:</strong> Mira Solanki (<code>demo-creator-01</code>), Theo Laurent (<code>demo-creator-02</code>), Anika Rao (<code>demo-creator-03</code>)</li>
+            <li><strong>Brands:</strong> Studio Saffron (<code>demo-brand-01</code>), Still Form Studio (<code>demo-brand-02</code>)</li>
+          </ul>
+          <p style="font-size:12px;margin:6px 0 0;color:var(--muted)"><em>Note:</em> As documented in the project specifications, demonstration profiles are public directory showcase fixtures and do not have live email inboxes. To test live interactive actions (submitting proposals, uploading media, managing engagements), enter your own valid email address to receive real login codes.</p>
+        </div>
+      </section>
+
+      <section class="help-section">
+        <h3>6. Administrator Access</h3>
+        <p>Platform administrators sign in through this same secure email-code interface using their authorized account. Server-side role authorization automatically enforces admin privileges for verification evidence reviews. There is no public admin bypass or insecure backdoor.</p>
+      </section>
+    </div>
+
+    <div class="help-foot">
+      <button type="button" class="btn btn-primary btn-small" id="help-close-bottom">Got it, back to sign in</button>
+      <a href="/project-notes.html" class="muted" style="font-size:12px">View technical project notes ↗</a>
+    </div>
+  </div>
+</div>
+
+<style>
+.help-backdrop{position:fixed;inset:0;background:rgba(37,35,31,.65);backdrop-filter:blur(4px);z-index:999;display:grid;place-items:center;padding:20px;animation:helpFade .2s ease}
+.help-panel{background:var(--surface);width:min(620px,100%);max-height:88vh;display:flex;flex-direction:column;border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;animation:helpSlide .25s cubic-bezier(.16,1,.3,1)}
+.help-header{display:flex;justify-content:space-between;align-items:start;padding:22px 24px 16px;border-bottom:1px solid var(--line)}
+.help-close{border:0;background:#eee8df;border-radius:999px;width:32px;height:32px;display:grid;place-items:center;color:var(--ink);font-size:14px;cursor:pointer;transition:background .15s}
+.help-close:hover{background:#dfd7cb}
+.help-content{padding:20px 24px;overflow-y:auto;font-size:13px;line-height:1.6;color:#454038}
+.help-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(232,226,216,.7)}
+.help-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.help-section h3{font-size:15px;color:var(--ink);margin:0 0 8px;font-weight:700}
+.help-section p{margin:0 0 8px}
+.help-section ol,.help-section ul{margin:6px 0 10px;padding-left:22px}
+.help-section li{margin-bottom:5px}
+.help-roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.help-role-card{background:#f8f5ee;border:1px solid var(--line);border-radius:12px;padding:12px}
+.help-role-card strong{display:block;font-size:12px;color:var(--ink);margin-bottom:4px}
+.help-role-card span{display:block;font-size:11px;color:var(--muted);line-height:1.4}
+.help-demo-box{background:#f5efe6;border:1px solid #ebd9c8;border-radius:14px;padding:14px}
+.help-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid var(--line);background:#faf8f3}
+@keyframes helpFade{from{opacity:0}to{opacity:1}}
+@keyframes helpSlide{from{transform:translateY(12px) scale(.98)}to{transform:translateY(0) scale(1)}}
+@media(max-width:600px){.help-roles{grid-template-columns:1fr}.help-panel{max-height:92vh;border-radius:18px}.help-header,.help-content,.help-foot{padding-inline:18px}}
+</style>
+
+<script>
+(function(){
+  const A=window.hatchable&&window.hatchable.auth;
+  const form=document.getElementById('login-form'),email=document.getElementById('email'),code=document.getElementById('code');
+  const codeWrap=document.getElementById('code-wrap'),btn=document.getElementById('submit'),err=document.getElementById('error');
+  const offer=document.getElementById('passkey-offer');let step='email',hasPasskey=false,user=null;
+  const helpBtn=document.getElementById('help-btn'),helpModal=document.getElementById('help-modal'),helpClose=document.getElementById('help-close'),helpCloseBottom=document.getElementById('help-close-bottom');
+
+  function openHelp(){if(helpModal){helpModal.hidden=false;document.body.style.overflow='hidden';helpClose.focus();}}
+  function closeHelp(){if(helpModal){helpModal.hidden=true;document.body.style.overflow='';if(helpBtn)helpBtn.focus();}}
+  if(helpBtn) helpBtn.addEventListener('click',openHelp);
+  if(helpClose) helpClose.addEventListener('click',closeHelp);
+  if(helpCloseBottom) helpCloseBottom.addEventListener('click',closeHelp);
+  if(helpModal) helpModal.addEventListener('click',e=>{if(e.target===helpModal) closeHelp();});
+  window.addEventListener('keydown',e=>{if(e.key==='Escape'&&helpModal&&!helpModal.hidden) closeHelp();});
+
+  const params=new URLSearchParams(location.search);
+  let next=params.get('next')||'/#/dashboard';
+  if(next==='/app'||next==='/app/'||next==='app'||next.includes('login')) next='/#/dashboard';
+  else if(!next.startsWith('/#')) {
+    next = next.startsWith('/') ? '/#' + next : '/#/' + next;
+  }
+  function showError(e){err.hidden=false;err.textContent=(e&&e.message)||'Something went wrong. Please try again.';}
+  async function init(){if(!A){showError({message:'Sign-in service is still starting. Refresh this page in a moment.'});return;}try{const s=await A.getSession();if(s&&s.user){location.href=next;return;}if(A.supportsPasskeys())email.setAttribute('autocomplete','username webauthn');}catch(e){}}
+  form.addEventListener('submit',async e=>{e.preventDefault();err.hidden=true;btn.disabled=true;
+    try{if(!A)throw new Error('Sign-in service is unavailable.');
+      if(step==='email'){
+        const r=await A.startLogin({email:email.value.trim()});hasPasskey=!!r.has_passkey;
+        if(hasPasskey&&A.supportsPasskeys()){try{const pass=await A.signInWithPasskey({email:email.value.trim()});user=pass.user;location.href=next;return;}catch(e){}}
+        step='code';codeWrap.hidden=false;code.required=true;document.getElementById('title').textContent='Check your inbox.';document.getElementById('desc').textContent='We sent a six-digit sign-in code to '+email.value.trim()+'. Enter it below to continue.';btn.textContent='Verify and sign in';code.focus();
+      }else{
+        const result=await A.verifyCode({email:email.value.trim(),code:code.value.trim()});user=result.user;
+        if(!hasPasskey&&A.supportsPasskeys()&&localStorage.getItem('creova_passkey_offer_declined')!=='1'){form.hidden=true;offer.hidden=false;}else location.href=next;
+      }
+    }catch(e){showError(e);}finally{btn.disabled=false;}
+  });
+  document.getElementById('add-passkey').addEventListener('click',async()=>{try{const saved=await A.registerPasskey({name:'CREOVA on this device'});if(!saved)localStorage.setItem('creova_passkey_offer_declined','1');}catch(e){localStorage.setItem('creova_passkey_offer_declined','1');}location.href=next;});
+  document.getElementById('skip-passkey').addEventListener('click',()=>{localStorage.setItem('creova_passkey_offer_declined','1');location.href=next;});
+  init();
+})();
+</script>
+</body></html>

@@ -1,0 +1,16 @@
+[auth]
+enabled = true
+providers = ["email"]
+
+[ai]
+required = true
+providers = ["openai"]
+description = "Used by the optional GPT-powered creative brief assistant. Configure an OpenAI provider key in Hatchable Setup; manual brief editing remains available without AI."
+
+[db.tables.app_profiles]
+read = "public"
+write = "own"
+
+[db.tables.brief_ai_usage]
+read = "own"
+write = "own"

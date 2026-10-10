@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Smoke tests — CREOVA</title><link rel="stylesheet" href="/theme.css"><style>.test-row{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.test-row:last-child{border-bottom:0}.test-row h3{font-size:13px;margin:0}.test-row p{font-size:12px;color:var(--muted);margin:4px 0 0}.test-pill{font-size:10px;font-weight:850;padding:5px 9px;border-radius:99px;background:#e8e1d6;color:#6c6255}.test-pill.pass{background:#deeadb;color:#335b39}.test-pill.fail{background:#f4ded9;color:#8b3429}.test-pill.run{background:#f2e6d0;color:#855c25}</style></head>
+<body><header class="header"><div class="container nav"><a class="wordmark" href="/"><span class="mark">C</span> CREOVA</a><a class="btn btn-soft" href="/project-notes.html">Build notes</a></div></header>
+<main class="container section" style="max-width:900px"><div class="eyebrow">Automated smoke tests</div><h1 class="serif" style="font-size:clamp(38px,6vw,60px);margin:12px 0">Check the basics.</h1><p class="hero-copy">Runs read-only public API checks plus harmless anonymous-write attempts. It does not create or modify user data. For reliable use, open this page after enabling public project visibility, or enter through the short-lived visitor preview.</p><div class="dashboard-stats"><div class="metric"><span>Checks</span><strong id="total">11</strong><small>API and access checks</small></div><div class="metric"><span>Passed</span><strong id="passed">—</strong><small>Expected result observed</small></div><div class="metric"><span>Failed</span><strong id="failed">—</strong><small>Investigate before judging</small></div></div><div class="form-actions" style="justify-content:flex-start"><button class="btn btn-primary" id="run" type="button">Run smoke tests ↻</button><a class="btn btn-soft" href="/test-report.html">Read last test report</a></div><div class="panel" id="results" aria-live="polite"><div class="loading">Running checks…</div></div><div class="notice">These are smoke tests, not a replacement for two-account browser testing of email authentication, uploads, the proposal lifecycle, and admin verification review.</div></main><footer class="footer"><div class="container footer-inner"><span>CREOVA AI · Smoke test runner</span><span><a href="/readme.html">Setup README</a></span></div></footer>
+<script>
+(function(){
+ const box=document.getElementById('results'),button=document.getElementById('run');
+ const cases=[
+  ['Database health','/api/health',async d=>d.status==='ok'&&d.database==='connected'],
+  ['Public creator listing','/api/creators?limit=3',async d=>Array.isArray(d.creators)&&d.total>=3],
+  ['Combined backend filters','/api/creators?tool=Runway&category=AI%20filmmaking&availability=open&limit=10',async d=>d.total===1&&d.creators[0]?.display_name==='Mira Solanki'],
+  ['Keyword search across tools and skills','/api/creators?q=Runway&limit=10',async d=>Array.isArray(d.creators)&&d.creators.length>=1&&d.creators.some(c=>(c.tools||[]).some(t=>String(t).toLowerCase().includes('runway')))],
+  ['Empty search results','/api/creators?skill=creova-no-match-skill&limit=10',async d=>d.total===0&&Array.isArray(d.creators)],
+  ['Published brief listing','/api/briefs',async d=>Array.isArray(d.briefs)&&d.briefs.length>=2],
+  ['Public creator detail','/api/creator?user_id=demo-creator-01',async d=>d.creator?.display_name==='Mira Solanki'&&Array.isArray(d.portfolio)&&d.portfolio.length>=1],
+ ];
+ const writeCases=[
+  ['Anonymous profile write is blocked','/api/profile',{display_name:'Smoke test should not persist'},401],
+  ['Anonymous brief write is blocked','/api/briefs',{title:'Smoke test should not persist'},401],
+  ['Anonymous proposal access is blocked','/api/proposals',null,401],
+  ['Anonymous verification access is blocked','/api/verification',null,401],
+ ];
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ async function run(){
+  button.disabled=true;button.textContent='Running…';
+  document.getElementById('passed').textContent='—';document.getElementById('failed').textContent='—';
+  const all=[...cases.map(async ([name,url,check])=>{let r,d;try{r=await fetch(url,{credentials:'same-origin'});d=await r.json();const ok=r.ok&&await check(d);return {name,ok,detail:ok?'Expected response shape received':('Unexpected response ('+r.status+'): '+(d.error||JSON.stringify(d).slice(0,160)))};}catch(e){return {name,ok:false,detail:String(e&&e.message||e)};}}),
+    ...writeCases.map(async ([name,url,body,expected])=>{try{const r=await fetch(url,{method:body?'POST':'GET',credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});let d={};try{d=await r.json();}catch(e){}const ok=r.status===expected;return {name,ok,detail:ok?'Correctly rejected anonymous request (HTTP '+r.status+')':('Expected HTTP '+expected+', got '+r.status+' '+(d.error||''))};}catch(e){return {name,ok:false,detail:String(e&&e.message||e)};}})
+  ];
+  const results=await Promise.all(all);const passed=results.filter(x=>x.ok).length;
+  document.getElementById('passed').textContent=passed;document.getElementById('failed').textContent=results.length-passed;
+  box.innerHTML='<div class="panel-head"><div><h2>Run results</h2><p>'+passed+' of '+results.length+' checks passed at '+new Date().toLocaleTimeString()+'</p></div><span class="pill '+(passed===results.length?'pill-green':'pill-terracotta')+'">'+(passed===results.length?'All smoke checks passed':'Review failures')+'</span></div>'+results.map(x=>'<div class="test-row"><div><h3>'+esc(x.name)+'</h3><p>'+esc(x.detail)+'</p></div><span class="test-pill '+(x.ok?'pass':'fail')+'">'+(x.ok?'PASS':'FAIL')+'</span></div>').join('');
+  button.disabled=false;button.textContent='Run again ↻';
+ }
+ button.addEventListener('click',run);
+ run();
+})();
+</script></body></html>
