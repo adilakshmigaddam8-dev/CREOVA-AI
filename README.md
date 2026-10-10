@@ -10,7 +10,7 @@ Instead of relying on scattered portfolios, unstructured messages, and disconnec
 
 ## Hosted application
 
-- App: https://creova-ai.hatchable.site
+- App: https://creova-ai-6jmu.hatchable.site
 - Project console: https://hatchable.com/console/projects/creova-ai
 - Build notes and API reference: https://creova-ai.hatchable.site/project-notes.html
 - Test report: https://creova-ai.hatchable.site/test-report.html
